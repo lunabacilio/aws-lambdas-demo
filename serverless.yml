@@ -1,0 +1,37 @@
+## using AWS sample, I'm going to deploy a simple lambda function for nodejs app 20.18
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  NodeApi:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+        AllowOrigin: "'*'"
+
+  GetAllUsersFunctions:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: src/controllers/user/getAllUsers.getAllUsers
+      Runtime: nodejs20.18
+      Role: arn:aws:iam::123456789012:role/lambda-role ## Add here the lambda role
+      #VpcConfig:
+      #  SecurityGroupIds:
+      #    - sg-12345678901234567
+      #  SubnetIds:
+      #    - subnet-12345678901234567
+      #Environment:
+        #Variables:
+          #ENV: dev
+      Layers:
+        - arn:aws:lambda:us-east-1:123456789012:layer:my-layer:1 ## add the layer
+      Events:
+        GetAllUsers:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: GET
+            Rest
